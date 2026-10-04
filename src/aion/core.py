@@ -1,6 +1,7 @@
+from aion.config import Config
 from aion.identity import load_or_create_identity
 from aion.event_store import append_event, initialize_event_store
-from aion.providers.mock import MockProvider
+from aion.providers.factory import create_provider
 
 
 class AionCore:
@@ -8,7 +9,8 @@ class AionCore:
         initialize_event_store()
 
         self.identity = load_or_create_identity()
-        self.provider = MockProvider()
+        self.config = Config()
+        self.provider = create_provider(self.config.provider)
 
     def chat(self, message: str) -> str:
         append_event(
