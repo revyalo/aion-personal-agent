@@ -76,7 +76,7 @@ A mature AION should be able to:
     Windows       macOS        Android
      client       client        client
 
-The initial implementation deliberately starts much smaller: one text client, one Core process, SQLite, a model-provider abstraction and persistent memories.
+The initial implementation deliberately starts much smaller: one text client, one Core process, SQLite, a model-provider abstraction, persistent identity and a canonical append-only event log.
 
 The experimental Neurocore is **not an H1 dependency**. It is introduced only after simple deterministic baselines exist and can be measured.
 
@@ -125,6 +125,22 @@ See [HITOS.md](HITOS.md) for detailed exit criteria.
 
 ## Status
 
-**H0 — research and architecture baseline.**
+**H0 — Foundations: completed.**  
+**H1 — Birth: in progress.**
+
+Implemented in H1:
+- installable Python package using a `src/` layout;
+- persistent AION instance identity stored in SQLite;
+- canonical append-only event store;
+- model-provider abstraction with a deterministic `MockProvider`;
+- `AionCore` orchestration layer;
+- interactive terminal client;
+- automated persistence/event-store tests with isolated temporary databases.
+
+Current H1 focus:
+- configuration and secret handling;
+- first real LLM provider adapter;
+- conversation-context replay through the provider interface;
+- end-to-end restart test covering identity and canonical conversation history.
 
 No claim in the roadmap should be interpreted as an implemented feature until it is marked as completed and backed by code/tests.
