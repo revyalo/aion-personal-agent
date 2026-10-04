@@ -113,3 +113,74 @@ Continue **H1 — Birth**:
 5. verify the CLI with the real provider while preserving the same AION identity and event history.
 
 H1 remains **in progress** until those integration and configuration requirements are covered.
+
+
+## 2026-10-05 — H1 completed, H2 started and stabilization gate defined
+
+### H1 closure
+
+H1 — Birth is considered functionally complete.
+
+Verified capabilities now include:
+- persistent AION identity across restarts;
+- SQLite-backed canonical conversation events;
+- provider abstraction independent from AION identity;
+- Gemini, OpenAI and Mock adapters;
+- explicit configuration and secret loading outside Git;
+- bounded conversation context reconstruction;
+- provider fallback and provider-error recording;
+- turn links for new assistant responses;
+- automated tests beyond the original identity/event baseline.
+
+The project has moved beyond the original H1 scope and already contains early H2 functionality.
+
+### H2 implemented so far
+
+Current memory baseline:
+- dedicated Memory Store;
+- provenance from memories to source event IDs;
+- conservative explicit-memory extraction;
+- MemoryCandidate and MemoryPolicy;
+- persistent memories that survive restart;
+- successful recall when the original statement is outside the recent conversation window;
+- identity/kernel rules that distinguish stored evidence from model interpretation.
+
+### Reliability incident and lesson
+
+A multiline terminal transcript was accidentally pasted into the interactive CLI and each line was treated as a separate user submission. This generated 177 unwanted events and unnecessary provider calls.
+
+A backup was created before cleanup. The contaminated range was identified and removed while preserving the valid source events used by existing memories.
+
+The incident exposed a broader requirement: terminal input, turns, retries, invalidation and recovery need deterministic semantics before memory automation grows.
+
+### Read-only architecture audit
+
+A read-only audit of the committed repository:
+- reviewed the implementation, documentation and current automated tests;
+- confirmed that the architecture remains viable;
+- found no demonstrated critical corruption issue requiring a rewrite;
+- identified high-priority risks around concurrent turns, singleton identity bootstrap, provider error normalization, invalid provider outputs, crash recovery, memory lifecycle and prompt-injection-shaped memory data;
+- confirmed that SQLite can remain the storage engine for the current stage;
+- recommended postponing PostgreSQL, Redis, pgvector, full RAG, FastAPI, knowledge graphs, proactive loops, distributed clients and Neurocore work until the current invariants are stronger.
+
+### Stabilization gate before expanding H2
+
+The required work is now tracked in:
+
+`docs/STABILIZATION_REQUIREMENTS.md`
+
+Main priorities:
+1. stable database path, single-instance guard and atomic singleton identity;
+2. verified backup/restore and minimal schema migrations;
+3. explicit turn identity/state, complete-turn context and idempotency;
+4. safe CLI submission, multiline paste and interruption handling;
+5. provider result validation, normalized errors, deadlines/retries/cooldowns;
+6. minimal memory lifecycle for superseding, retraction and invalidation;
+7. stronger evidence/attribution rules and structured untrusted memory context;
+8. regression tests and sanitized observability for each stabilization change.
+
+### Development pause
+
+AION can remain paused safely at this checkpoint while priority returns to university work, the TFG and English preparation.
+
+When development resumes, continue from the stabilization document rather than immediately adding new H2 features.
