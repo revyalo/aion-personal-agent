@@ -49,3 +49,33 @@ This document records decisions that should remain stable unless evidence justif
 **Decision:** reuse mature storage, speech and tool-protocol components where they fit. Custom engineering effort should focus on continuity, evidence-backed memory, identity evolution, proactivity and cross-device presence.
 
 **Reason:** rebuilding databases, VAD or generic tool runtimes provides little project differentiation.
+
+## ADR-009 — Neurocore is optional and incremental
+
+**Decision:** a persistent bio-inspired controller may be researched after deterministic proactivity baselines exist. A full Drosophila-brain simulation is not required.
+
+**Reason:** the useful hypothesis is whether cheap internal dynamics improve salience and action selection, not whether copying a biological connectome makes AION intelligent.
+
+## ADR-010 — Neurocore cannot grant authority
+
+**Decision:** Neurocore state may rank or propose actions, but it cannot grant permissions, bypass confirmations or authorize destructive/external side effects.
+
+**Reason:** internal activation is not equivalent to user intent or authorization.
+
+## ADR-011 — No sentience/consciousness claim from behaviour alone
+
+**Decision:** AION documentation and evaluation distinguish observable functions from claims about subjective experience.
+
+**Reason:** memory, self-reference, persistent state, affect-like variables and fluent self-report do not establish sentience. The project should make claims that can be operationalized and tested.
+
+## ADR-012 — Human-like internal labels remain inspectable engineering state
+
+**Decision:** labels such as curiosity, urgency, concern, confidence or fatigue refer to explicit computational variables unless evidence supports a stronger interpretation.
+
+**Reason:** this keeps the system auditable and avoids confusing anthropomorphic interfaces with scientific evidence.
+
+## ADR-013 — Release/commercialization triggers a fresh compliance review
+
+**Decision:** legal/privacy assumptions for a personal research prototype are not carried forward automatically to public distribution, third-party users or commercial deployment.
+
+**Reason:** obligations can change materially with purpose, users, data processed, capabilities and jurisdiction.

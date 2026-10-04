@@ -12,19 +12,17 @@ AION is not intended to be another chat UI around a language model. The project 
 
 AION is treated as an entity that is **independent from any single model, application or device**.
 
-```text
-AION != LLM
-AION != device
-AION != conversation
+    AION != LLM
+    AION != device
+    AION != conversation
 
-AION =
-    identity
-  + memory
-  + history
-  + state
-  + learned behaviour
-  + capabilities
-```
+    AION =
+        identity
+      + memory
+      + history
+      + state
+      + learned behaviour
+      + capabilities
 
 The LLM is a replaceable reasoning engine. Windows, macOS and Android clients are peripherals through which the same persistent AION instance can observe, converse and act.
 
@@ -38,6 +36,8 @@ The LLM is a replaceable reasoning engine. Windows, macOS and Android clients ar
 - **Model agnostic.** Reasoning providers should be replaceable without destroying AION's identity or history.
 - **Security before autonomy.** Tool access is capability-based, least-privilege and confirmation-gated for sensitive actions.
 - **Private by design.** Personal memory is never committed to the source repository.
+- **Biological inspiration is optional, not authority.** Experimental neural controllers may influence salience or action selection, but they never bypass deterministic permissions.
+- **No consciousness claims.** Persistent state, self-models or human-like language are engineering behaviours, not evidence that AION is sentient.
 
 ## Long-term vision
 
@@ -52,32 +52,33 @@ A mature AION should be able to:
 - use tools, files and applications under explicit permissions;
 - support multiple reasoning models and local models;
 - explain why it remembers something and where that memory originated;
-- remain testable through objective memory, proactivity, safety and latency metrics.
+- remain testable through objective memory, proactivity, safety and latency metrics;
+- optionally maintain a low-cost persistent **Neurocore** for salience, internal-state dynamics and LLM wake/sleep decisions without running a frontier model continuously.
 
 ## Initial architecture
 
-```text
-                    AION CORE
-       +--------------------------------+
-       | Identity                       |
-       | Event Log                      |
-       | Memory                         |
-       | Context                        |
-       | Personality                    |
-       | Reasoning / Model Router       |
-       | Proactivity                    |
-       | Tool & Permission Gateway      |
-       +---------------+----------------+
-                       |
-              secure client protocol
-                       |
-          +------------+-------------+
-          |            |             |
-       Windows       macOS        Android
-        client       client        client
-```
+    AION CORE
+    +--------------------------------+
+    | Identity                       |
+    | Event Log                      |
+    | Memory                         |
+    | Context                        |
+    | Personality                    |
+    | Reasoning / Model Router       |
+    | Proactivity                    |
+    | Tool & Permission Gateway      |
+    +---------------+----------------+
+                    |
+           secure client protocol
+                    |
+       +------------+-------------+
+       |            |             |
+    Windows       macOS        Android
+     client       client        client
 
 The initial implementation deliberately starts much smaller: one text client, one Core process, SQLite, a model-provider abstraction and persistent memories.
+
+The experimental Neurocore is **not an H1 dependency**. It is introduced only after simple deterministic baselines exist and can be measured.
 
 ## Research questions
 
@@ -86,6 +87,7 @@ The initial implementation deliberately starts much smaller: one text client, on
 - **RQ3 — Proactivity:** How can the agent initiate conversation at useful moments without becoming intrusive or expensive?
 - **RQ4 — Cross-device continuity:** How can one canonical agent state be preserved across heterogeneous clients and intermittent connectivity?
 - **RQ5 — Agent security:** How can AION use powerful tools while resisting indirect prompt injection, confused-deputy failures and accidental destructive actions?
+- **RQ6 — Persistent control:** Can a cheap stateful controller improve salience, interruption decisions and model activation compared with deterministic rules, without weakening auditability or safety?
 
 ## Milestones
 
@@ -103,6 +105,7 @@ Development is organized around named milestones rather than a fixed deadline.
 - **H9 — Intelligence:** model routing, evaluation-driven selection and optional local models.
 - **H10 — Harden:** long-horizon evaluation, reliability, migration and recovery.
 - **H11 — AION 1.0:** persistent personal agent with memory, voice, initiative, tools and multi-device continuity.
+- **N-track — Neurocore:** optional post-baseline research track for persistent low-cost internal dynamics and biologically inspired action selection.
 
 See [HITOS.md](HITOS.md) for detailed exit criteria.
 
@@ -111,6 +114,9 @@ See [HITOS.md](HITOS.md) for detailed exit criteria.
 - [Project context](docs/PROJECT_CONTEXT.md)
 - [Research scope](docs/RESEARCH_SCOPE.md)
 - [Architecture](docs/ARCHITECTURE.md)
+- [Neurocore research track](docs/NEUROCORE.md)
+- [Cognition and sentience policy](docs/COGNITION_AND_SENTIENCE.md)
+- [Legal and ethical boundaries](docs/LEGAL_AND_ETHICS.md)
 - [Bibliography](docs/BIBLIOGRAPHY.md)
 - [Evaluation](docs/EVALUATION.md)
 - [Security](docs/SECURITY.md)

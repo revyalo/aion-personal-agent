@@ -190,3 +190,64 @@ Target capabilities:
 - model-agnostic reasoning.
 
 AION 1.0 is not defined by consciousness claims. It is defined by observable engineering properties: continuity, memory, adaptivity, safe agency and portability.
+
+The experimental Neurocore track is **not required** to call H11 complete.
+
+# Experimental N-track — Neurocore
+
+This track begins only when simple baselines exist. It may run in parallel after H5/H6 or after H11 without blocking the main roadmap.
+
+## N0 — Baseline internal state
+
+Goal: make the control problem measurable before adding neural complexity.
+
+Scope:
+- explicit scalar state for urgency, novelty, relevance, interruption cost and cooldown;
+- deterministic update rules;
+- full logging;
+- tests for model wake/sleep decisions.
+
+Exit criterion:
+- reproducible baseline dataset and metrics for accepted/rejected proactive events.
+
+## N1 — Stateful controller
+
+Goal: replace selected hand-written transitions with a cheap persistent controller.
+
+Scope:
+- recurrent/state-machine or small learned controller;
+- bounded state;
+- deterministic capability gate remains external;
+- ability to fall back to N0.
+
+Evaluation:
+- proactive precision;
+- unnecessary wake-ups;
+- latency;
+- compute cost;
+- stability under repetitive/adversarial stimuli.
+
+## N2 — Bio-inspired controller
+
+Goal: test whether spiking or other biologically inspired dynamics provide useful behaviour beyond simpler controllers.
+
+Scope:
+- small SNN or equivalent temporal neural model;
+- salience/action-selection experiments;
+- habituation and competing-goal dynamics;
+- interpretable input/output bridge.
+
+Explicit non-goal:
+- reproducing the full Drosophila brain.
+
+## N3 — Comparative evaluation
+
+Goal: decide whether the Neurocore deserves a permanent place in AION.
+
+Compare:
+1. deterministic rules;
+2. explicit state machine;
+3. small conventional learned controller;
+4. bio-inspired/spiking controller.
+
+Keep the simplest design that wins on useful behaviour, cost, reliability and auditability. A biologically inspired design is not preferred merely because it is biologically inspired.
