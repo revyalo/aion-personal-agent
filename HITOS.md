@@ -4,6 +4,8 @@ The roadmap is capability-driven. A milestone is complete only when its exit cri
 
 ## H0 — Foundations
 
+**Status: completed (2026-10-04).**
+
 Goal: freeze the first engineering/research baseline before implementation expands.
 
 Deliverables:
@@ -20,6 +22,22 @@ Exit criteria:
 - raw events are defined as the canonical historical source.
 
 ## H1 — Birth
+
+**Status: in progress.**
+
+Implemented:
+- Python Core;
+- SQLite-backed persistent identity;
+- append-only canonical event log;
+- model-provider interface and MockProvider;
+- terminal client;
+- automated identity/event-store tests.
+
+Remaining before closure:
+- explicit configuration/secrets path;
+- first real provider adapter;
+- canonical conversation replay into model context;
+- end-to-end restart test.
 
 Goal: create the smallest persistent AION that can survive process restarts.
 
