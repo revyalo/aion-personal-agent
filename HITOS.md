@@ -23,21 +23,21 @@ Exit criteria:
 
 ## H1 — Birth
 
-**Status: in progress.**
+**Status: completed (2026-10-05).**
 
-Implemented:
+Implemented and verified:
 - Python Core;
 - SQLite-backed persistent identity;
-- append-only canonical event log;
-- model-provider interface and MockProvider;
+- canonical ordered event log;
+- model-provider abstraction with Mock, Gemini and OpenAI adapters;
+- configuration/secrets outside Git;
+- bounded conversation context reconstruction;
+- provider fallback and provider-error recording;
 - terminal client;
-- automated identity/event-store tests.
+- persistent restart behaviour;
+- automated tests across identity, events, context, providers and memory integration.
 
-Remaining before closure:
-- explicit configuration/secrets path;
-- first real provider adapter;
-- canonical conversation replay into model context;
-- end-to-end restart test.
+H1 is considered functionally complete. Robustness work discovered during the H2 audit is tracked in `docs/STABILIZATION_REQUIREMENTS.md` rather than reopening the original H1 capability goal.
 
 Goal: create the smallest persistent AION that can survive process restarts.
 
@@ -57,6 +57,12 @@ Exit test:
 4. AION retains the same identity and canonical conversation history.
 
 ## H2 — Remember
+
+**Status: in progress, stabilization gate active.**
+
+A minimum H2 implementation already exists: persistent memories, provenance to source events, explicit-memory extraction/policy, and recall outside the recent conversation window.
+
+Before expanding automatic memory or retrieval, complete the engineering gate in `docs/STABILIZATION_REQUIREMENTS.md`.
 
 Goal: retrieve useful memories instead of replaying the entire history.
 
