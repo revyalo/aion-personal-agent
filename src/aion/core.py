@@ -63,10 +63,10 @@ class AionCore:
         memories = get_memories()
 
         # 5. Construimos el contexto reciente de conversación.
-        conversation_context = build_conversation_context(
-            events
+        conversation_context = build_conversation_context (
+            events,
+            current_user_event_id=user_event_id,
         )
-
         # 6. Construimos el contexto de memoria persistente.
         memory_context = build_memory_context(
             memories

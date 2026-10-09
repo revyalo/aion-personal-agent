@@ -1,5 +1,5 @@
 from aion.context_builder import build_conversation_context
-
+import pytest
 
 def test_failed_user_turn_is_not_included():
     events = [
@@ -108,3 +108,33 @@ def test_explicit_turn_linking_overrides_event_order():
     )
 
     assert context == expected
+
+
+def test_current_turn_ignores_later_user_messages():
+    events = [
+        {
+            "event_id": "user-a",
+            "event_type": "user_message",
+            "payload": {"text": "Pregunta A"},
+        },
+        {
+            "event_id": "user-b",
+            "event_type": "user_message",
+            "payload": {"text": "Pregunta B"},
+        },
+    ]
+
+    context = build_conversation_context(
+        events,
+        current_user_event_id="user-a",
+    )
+
+    assert context == "User: Pregunta A"
+
+
+def test_missing_current_turn_is_rejected():
+    with pytest.raises(ValueError):
+        build_conversation_context(
+            [],
+            current_user_event_id="missing",
+        )

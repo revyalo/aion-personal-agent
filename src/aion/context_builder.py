@@ -1,7 +1,28 @@
+import pytest
+
+
 def build_conversation_context(
     events: list[dict],
     max_events: int = 6,
+    current_user_event_id: str | None = None,
 ) -> str:
+    if current_user_event_id is not None:
+        try:
+            current_index = next(
+                index
+                for index, event in enumerate(events)
+                if event["event_type"] == "user_message"
+                and event["event_id"] == current_user_event_id
+            )
+        except StopIteration as error:
+            raise ValueError(
+                "El turno actual no existe en el Event Store."
+            ) from error
+
+        # Solo utilizamos eventos registrados hasta
+        # el mensaje que estamos procesando.
+        events = events[:current_index + 1]
+
     # Mensajes de usuario cuyo turno terminó con error.
     failed_user_event_ids = {
         event["payload"]["user_event_id"]
@@ -134,3 +155,33 @@ def build_memory_context(
         )
 
     return "\n".join(lines)
+
+
+def test_current_turn_ignores_later_user_messages():
+    events = [
+        {
+            "event_id": "user-a",
+            "event_type": "user_message",
+            "payload": {"text": "Pregunta A"},
+        },
+        {
+            "event_id": "user-b",
+            "event_type": "user_message",
+            "payload": {"text": "Pregunta B"},
+        },
+    ]
+
+    context = build_conversation_context(
+        events,
+        current_user_event_id="user-a",
+    )
+
+    assert context == "User: Pregunta A"
+
+
+def test_missing_current_turn_is_rejected():
+    with pytest.raises(ValueError):
+        build_conversation_context(
+            [],
+            current_user_event_id="missing",
+        )
