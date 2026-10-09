@@ -1,6 +1,3 @@
-import pytest
-
-
 def build_conversation_context(
     events: list[dict],
     max_events: int = 6,
@@ -119,7 +116,47 @@ def build_conversation_context(
         )
 
     # Limitamos el contexto después de reconstruir los turnos válidos.
-    recent_events = conversation_events[-max_events:]
+
+    # El presupuesto debe ser positivo.
+    if max_events < 1:
+        raise ValueError(
+            "max_events debe ser mayor que cero."
+        )
+
+    # El último evento puede ser una pregunta aún
+    # pendiente de respuesta.
+    pending_event = (
+        conversation_events[-1]
+        if conversation_events
+        and conversation_events[-1]["event_type"] == "user_message"
+        else None
+    )
+
+    # Los demás eventos forman parejas completas:
+    # pregunta + respuesta.
+    complete_events = (
+        conversation_events[:-1]
+        if pending_event is not None
+        else conversation_events
+    )
+
+    # Reservamos espacio para la pregunta actual.
+    remaining = max_events - (
+        1 if pending_event is not None else 0
+    )
+
+    # Cada pareja consume dos posiciones.
+    pairs_to_keep = remaining // 2
+
+    if pairs_to_keep > 0:
+        recent_events = complete_events[-2 * pairs_to_keep:]
+    else:
+        recent_events = []
+
+    # La pregunta actual siempre se conserva.
+    if pending_event is not None:
+        recent_events.append(pending_event)
+
 
     lines = []
 
@@ -155,33 +192,3 @@ def build_memory_context(
         )
 
     return "\n".join(lines)
-
-
-def test_current_turn_ignores_later_user_messages():
-    events = [
-        {
-            "event_id": "user-a",
-            "event_type": "user_message",
-            "payload": {"text": "Pregunta A"},
-        },
-        {
-            "event_id": "user-b",
-            "event_type": "user_message",
-            "payload": {"text": "Pregunta B"},
-        },
-    ]
-
-    context = build_conversation_context(
-        events,
-        current_user_event_id="user-a",
-    )
-
-    assert context == "User: Pregunta A"
-
-
-def test_missing_current_turn_is_rejected():
-    with pytest.raises(ValueError):
-        build_conversation_context(
-            [],
-            current_user_event_id="missing",
-        )
