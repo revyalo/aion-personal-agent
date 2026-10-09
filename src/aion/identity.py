@@ -1,6 +1,8 @@
+
 import uuid
 
 from aion.database import get_connection
+
 
 class Identity:
     def __init__(self, agent_id: str):
@@ -10,28 +12,43 @@ class Identity:
 def load_or_create_identity():
     connection = get_connection()
 
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS aion_instance (
-            agent_id TEXT PRIMARY KEY
-        )
-    """)
+    try:
+        # Reservamos la escritura antes de leer la identidad.
+        connection.execute("BEGIN IMMEDIATE")
 
-    row = connection.execute(
-        "SELECT agent_id FROM aion_instance LIMIT 1"
-    ).fetchone()
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS aion_instance (
+                agent_id TEXT PRIMARY KEY
+            )
+        """)
 
-    if row is not None:
-        agent_id = row[0]
-    else:
-        agent_id = str(uuid.uuid4())
+        # Leemos hasta dos filas para detectar inconsistencias.
+        rows = connection.execute(
+            "SELECT agent_id FROM aion_instance LIMIT 2"
+        ).fetchall()
 
-        connection.execute(
-            "INSERT INTO aion_instance (agent_id) VALUES (?)",
-            (agent_id,)
-        )
+        if len(rows) > 1:
+            raise RuntimeError(
+                "La base de datos contiene varias "
+                "identidades de AION."
+            )
+
+        if rows:
+            agent_id = rows[0][0]
+        else:
+            agent_id = str(uuid.uuid4())
+
+            connection.execute(
+                "INSERT INTO aion_instance (agent_id) VALUES (?)",
+                (agent_id,),
+            )
 
         connection.commit()
+        return Identity(agent_id)
 
-    connection.close()
+    except Exception:
+        connection.rollback()
+        raise
 
-    return Identity(agent_id)
+    finally:
+        connection.close()
