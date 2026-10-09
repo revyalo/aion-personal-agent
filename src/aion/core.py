@@ -14,12 +14,12 @@ from aion.memory_store import (
     initialize_memory_store,
 )
 from aion.providers.factory import create_provider
-
+from aion.migrations import prepare_database
 
 class AionCore:
     def __init__(self):
-        # Prepara Event Store + Memory Store.
-        initialize_memory_store()
+        # Comprueba y prepara la base antes de arrancar.
+        prepare_database()
 
         # Carga configuración.
         self.config = Config()

@@ -3,6 +3,10 @@ from contextlib import closing
 
 import aion.database as database
 
+import sqlite3
+
+from aion.identity import load_or_create_identity
+from aion.memory_store import initialize_memory_store
 
 SCHEMA_VERSION = 1
 SINGLETON_INDEX = "ux_aion_instance_singleton"
@@ -112,3 +116,35 @@ def migrate_database() -> int:
             connection.rollback()
             raise
 
+
+def prepare_database() -> int:
+    path = database.DATABASE_PATH
+
+    if not path.exists():
+        # Primera instalación: crear la estructura inicial.
+        initialize_memory_store()
+        load_or_create_identity()
+
+        # Actualizar inmediatamente al esquema vigente.
+        return migrate_database()
+
+    # Comprobar la versión sin modificar la base.
+    with closing(
+        sqlite3.connect(
+            f"{path.resolve().as_uri()}?mode=ro",
+            uri=True,
+        )
+    ) as connection:
+        version = connection.execute(
+            "PRAGMA user_version"
+        ).fetchone()[0]
+
+    if version == 0:
+        raise RuntimeError(
+            "La base de datos utiliza el esquema v0. "
+            "Realiza un backup verificado y ejecuta "
+            "la migración controlada antes de iniciar AION."
+        )
+
+    # Comprueba integridad, versión e identidad única.
+    return migrate_database()
